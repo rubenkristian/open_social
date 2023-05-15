@@ -1,6 +1,11 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"rubenkristian/open-social/app/handlers"
+	"rubenkristian/open-social/app/models"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 type Data struct {
 	Name    string `json:"name"`
@@ -9,14 +14,11 @@ type Data struct {
 
 func main() {
 	app := fiber.New()
+	models := models.BuildModel()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		data := Data{
-			Name:    "Kristian ruben",
-			Picture: "ruben.jpg",
-		}
-		return c.JSON(data)
-	})
+	api := app.Group("/api")
+
+	handlers.BuildHandler(api, models)
 
 	app.Listen(":4000")
 }
